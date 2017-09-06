@@ -54,8 +54,9 @@ void setup() /*-- -- ( SETUP: RUNS ONCE )-- -- */
 
 void loop() /*-- -- ( LOOP: RUNS CONSTANTLY )-- -- */
 {
-  lcd.clear();
+ // lcd.clear();
   GetNote();
+  upDateLED();
   tone(speakerPin, note);
 
 
@@ -65,27 +66,23 @@ void loop() /*-- -- ( LOOP: RUNS CONSTANTLY )-- -- */
   }  
   else if ((Tumbler_1 == 4) && (note == 457) && (Tumbler_2 < 4))  //Bb4
   {
-      digitalWrite(ledPin1, HIGH);
       Tumbler_2 += 1;
   }
   else if ((Tumbler_2 == 4) && (note == 432) && (Tumbler_3 < 4))  //A4
   {
-
-    digitalWrite(ledPin2, HIGH);
     Tumbler_3 += 1;
   }
   else if ((Tumbler_3 == 4) && (note == 288) && Tumbler_4 < 4)  //D4
   {
-   
-    digitalWrite(ledPin3, HIGH);
     Tumbler_4 += 1;
   }  
   
  if(Tumbler_4 == 4)
  {   
-    
+    lcd.setCursor(10,3); 
+    lcd.print(Tumbler_4);
     digitalWrite(ledPin4, HIGH);
-    delay(250);
+    delay(750);
     PlayKatniss();
     delay(750);
     PlayRue();
@@ -99,7 +96,11 @@ void loop() /*-- -- ( LOOP: RUNS CONSTANTLY )-- -- */
     lcd.setCursor(0,0);
     lcd.print("  Congratulations!  ");
     lcd.setCursor(0,1);
-    lcd.print(" j794.1 Kid ");
+    lcd.print("  You found a clue; ");
+    lcd.setCursor(0,2);
+    lcd.print("  j794.1 Kid p.1632 ");
+    lcd.setCursor(0,3);
+    lcd.print("(puzzle will reset!)");
     delay(15000);    //you have 15 seconds to write down the clue
     resetPuzzle();   //clear the screen and reset the tumblers for the next round
   }
@@ -108,11 +109,15 @@ void loop() /*-- -- ( LOOP: RUNS CONSTANTLY )-- -- */
  lcd.print(Tumbler_1);
  lcd.setCursor(10,2);
  lcd.print(Tumbler_2);
+// lcd.setCursor(13,2);       //test code
+// lcd.print(sensorValue);    //test code
  lcd.setCursor(0,3);
  lcd.print(Tumbler_3);
- lcd.setCursor(10,3);
+ lcd.setCursor(10,3);   
  lcd.print(Tumbler_4);
-   
+// lcd.setCursor(13,3);       //test code
+// lcd.print(pitch);          //test code
+
  delay(250);
 
 }/* -- (end main loop )-- */
@@ -162,6 +167,7 @@ void GetNote()
     {
       note = 216; //A3
       lcd.setCursor(0,1);
+      lcd.print("   ");
       lcd.print(note);
       lcd.setCursor(10,1);
       lcd.print("    A3    ");
@@ -170,6 +176,7 @@ void GetNote()
     {
       note = 228;  //A33/Bb3
       lcd.setCursor(0,1);
+      lcd.print("   ");
       lcd.print(note);
       lcd.setCursor(10,1);
       lcd.print("  A#3/Bb3 ");
@@ -306,5 +313,30 @@ void resetPuzzle()
  Tumbler_3 = 0;
  Tumbler_4 = 0; 
  lcd.clear();
+  digitalWrite(ledPin1, LOW);
+  digitalWrite(ledPin2, LOW);
+  digitalWrite(ledPin3, LOW);
+  digitalWrite(ledPin4, LOW);
  return;
+}
+
+void upDateLED()
+{
+  if (Tumbler_1 == 4)
+   {
+    digitalWrite(ledPin1, HIGH);
+   }  
+   if (Tumbler_2 == 4)
+   {
+    digitalWrite(ledPin2, HIGH);
+   }
+   if (Tumbler_3 == 4)
+   {
+    digitalWrite(ledPin3, HIGH);
+   }
+   if (Tumbler_4 == 4)
+   {
+    digitalWrite(ledPin4, HIGH);
+   }
+  
 }
